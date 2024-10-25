@@ -21,4 +21,12 @@ sequelize.authenticate()
         console.error('Não foi possível conectar ao banco de dados:', err);
     });
 
+sequelize.sync({ alter:true })
+    .then(() => {
+        console.log("Modelos sincronizados com sucesso.");
+    })
+    .catch(error => {
+        console.error("Erro na sincronização:", error);
+    });
+
 export default sequelize;
