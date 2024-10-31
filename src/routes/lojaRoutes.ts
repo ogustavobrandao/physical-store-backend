@@ -1,13 +1,17 @@
-import {Router} from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { lojaController } from '../controllers/LojaController';
 
 const router = Router();
 
-router.get('/lojas/:id', (req, res) => lojaController.show(req, res));
-router.get('/lojas', (req, res) => lojaController.index(req, res));
-router.post('/lojas', (req, res) => lojaController.store(req, res));
-router.put('/lojas/:id', (req, res) => lojaController.update(req, res));
-router.delete('/lojas/:id', (req, res) => lojaController.destroy(req, res));
-router.post('/lojas/buscarLojas/', (req, res) => lojaController.buscarLojaMaisProxima(req, res));
+const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+router.get('/lojas/:id', asyncHandler((req:Request, res:Response) => lojaController.show(req, res)));
+router.get('/lojas', asyncHandler((req:Request, res:Response) => lojaController.index(req, res)));
+router.post('/lojas', asyncHandler((req:Request, res:Response) => lojaController.store(req, res)));
+router.put('/lojas/:id', asyncHandler((req:Request<{id:string}>, res:Response) => lojaController.update(req, res)));
+router.delete('/lojas/:id', asyncHandler((req:Request, res:Response) => lojaController.destroy(req, res)));
+router.post('/lojas/buscarLojas/', asyncHandler((req:Request, res:Response) => lojaController.buscarLojaMaisProxima(req, res)));
 
 export default router;
