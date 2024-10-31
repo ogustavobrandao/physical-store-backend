@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import * as dotenv from 'dotenv';
+import logger from './logger';
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const sequelize = new Sequelize({
     password: process.env.DB_PASSWORD,
     dialect: 'postgres',
     models: [__dirname + '/../models'],
+    logging: (msg) => logger.info(msg)
 })
 
 sequelize.authenticate()
