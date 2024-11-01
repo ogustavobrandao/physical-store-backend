@@ -21,6 +21,12 @@ export class Loja extends Model {
 
     @Column({
         type: DataType.STRING,
+        allowNull:false,
+    })
+    numero!: string;
+
+    @Column({
+        type: DataType.STRING,
         allowNull: false,
     })
     cep!: string;
@@ -31,5 +37,10 @@ export class Loja extends Model {
     })
     telefone?: string;
 
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    email?: string;
 
 }
