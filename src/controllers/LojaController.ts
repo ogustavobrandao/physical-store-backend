@@ -3,7 +3,7 @@ import { LojaService } from '../services/lojaService'
 import { getDistancia } from '../api/ors'
 import { obterCoordenadas } from '../api/geocode';
 import { getEndereco } from '../api/viaCep';
-import { validateLojaStore, validateLojaUpdate, validateId } from '../validations/lojaValidation';
+import { validateLojaStore, validateLojaUpdate, validateId, validateCep } from '../validations/lojaValidation';
 
 
 class LojaController{
@@ -68,8 +68,14 @@ class LojaController{
     }
 
     async buscarLojaMaisProxima(req: Request, res: Response){
-        const lojas = await this.lojaService.all();
+        const errors = validateCep(req.body.cep);
+
+        if (errors.length > 0) {
+          return res.status(400).json({ message: 'Erro de validação do CEP', details: errors });
+        }
+
         const cepInput = await obterCoordenadas(req.body.cep);
+        const lojas = await this.lojaService.all();
         
         const lojasProximas = (await Promise.all(
             lojas.map(async (element) => {

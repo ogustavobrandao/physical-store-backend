@@ -77,11 +77,22 @@ function validateLojaUpdate(data: Partial<LojaDados>): string[] {
   
 function validateId(id: any): string[] {
     const errors: string[] = [];
-    
+
     if (typeof id !== 'number' || !Number.isInteger(id) || id <= 0) {
       errors.push('O ID deve ser um número inteiro positivo.');
     }
   
+    return errors;
+}
+
+function validateCep(cep: string){
+    const errors: string[] = [];
+
+    const cepPattern = /^\d{5}-\d{3}$/;
+    if (!cep || !cepPattern.test(cep)) {
+      errors.push("O CEP deve estar no formato 00000-000.");
+    }
+
     return errors;
 }
   
@@ -89,4 +100,5 @@ export {
 validateLojaStore,
 validateLojaUpdate,
 validateId,
+validateCep,
 };
