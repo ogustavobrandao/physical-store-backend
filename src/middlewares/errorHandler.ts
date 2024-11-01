@@ -15,6 +15,9 @@ export const errorHandler = (
             path: req.path,
             method: req.method,
             stack: error.stack,
+            query: req.query,
+            body: req.body,
+            message: error.message,
             response: error.response ? {
                 status: error.response.status,
                 data: error.response.data,
@@ -36,5 +39,4 @@ export const errorHandler = (
             message: 'Erro interno do servidor.',
         });
     }
-
 }
