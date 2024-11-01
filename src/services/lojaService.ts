@@ -1,3 +1,4 @@
+import { AppError } from '../errors/AppError';
 import {Loja} from '../models/Loja'
 
 export class LojaService {
@@ -6,28 +7,44 @@ export class LojaService {
     async create(data: Partial<Loja>): Promise<Loja> {
         try {
             return await Loja.create(data);
-        } catch (error) {
-            throw new Error('Erro ao criar loja: ' + error.message);
+        } catch (error: any) {
+            throw new AppError('Erro ao criar loja', 500);
         }
     }
+
     async findById(id: number) {
         try {
+            const loja = await Loja.findByPk(id);
 
-           const loja = await Loja.findByPk(id);
-           
-           return loja;
-        } catch (error) {
-            throw new Error('Erro ao buscar loja: ' + error.message);
+            if(!loja){
+                throw new AppError('Loja não encontrada', 404);
+            }
+            
+            return loja;
+        } catch (error: any) {
+            if(error instanceof AppError){
+                throw error;
+            }
+
+            throw new AppError('Erro ao buscar loja', 500);
         }
     }
 
     async all() {
         try {
             const lojas = await Loja.findAll();
+
+            if (lojas.length === 0) {
+                throw new AppError('Nenhuma loja encontrada', 404);
+            }
+
             return lojas;
-        } catch (error) {
-            throw new Error('Erro ao buscar todas as lojas: ' + error.message);
-            
+        } catch (error: any) {
+            if (error instanceof AppError) {
+                throw error;
+            }
+
+            throw new AppError('Erro ao buscar todas as lojas', 500);
         }
     }
 
@@ -36,13 +53,18 @@ export class LojaService {
             const loja = await Loja.findByPk(id);
             
             if(!loja){
-                throw new Error('Loja não encontrada');
+                throw new AppError('Loja não encontrada', 404);
             }
+
             await loja.update(data);
+
             return loja
-        } catch (error) {
-            throw new Error('Erro ao atualizar loja: ' + (error as Error).message);
-            
+        } catch (error: any) {
+            if(error instanceof AppError){
+                throw error;
+            }
+
+            throw new AppError('Erro ao atualizar loja', 500);
         }
     }
 
@@ -51,12 +73,16 @@ export class LojaService {
             const loja = await Loja.findByPk(id);
 
             if(!loja){
-                throw new Error('Loja não encontrada');
+                throw new AppError('Loja não encontrada', 404);
             }
+
             await loja.destroy();
-        } catch (error) {
-            throw new Error('Erro ao deletar loja')
+        } catch (error: any) {
+            if(error instanceof AppError){
+                throw error;
+            }
+
+            throw new AppError('Erro ao deletar loja', 500);
         }
     }
-
 }
