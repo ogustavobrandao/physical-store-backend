@@ -15,7 +15,7 @@ export async function obterCoordenadas(cep: string){
         return `${longitude},${latitude}` 
     } catch (error: any) {
         if(error.response){
-            throw new AppError(`Erro na API de Coordenadas: ${error.response.data?.error?.message || error.message}`,
+            throw new AppError(`Erro na API de Coordenadas`,
             500,
             error.response)
         }else{
