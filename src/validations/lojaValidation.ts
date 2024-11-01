@@ -77,7 +77,7 @@ function validateLojaUpdate(data: Partial<LojaDados>): string[] {
   
 function validateId(id: any): string[] {
     const errors: string[] = [];
-    console.log(typeof(id))
+    
     if (typeof id !== 'number' || !Number.isInteger(id) || id <= 0) {
       errors.push('O ID deve ser um número inteiro positivo.');
     }
