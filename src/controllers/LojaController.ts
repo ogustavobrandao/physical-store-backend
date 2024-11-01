@@ -13,7 +13,7 @@ class LojaController{
         this.lojaService = new LojaService();
     }
 
-    async show(req: Request<{id: string}>, res: Response){ //definir o tipo de retorno depois
+    async show(req: Request<{id: string}>, res: Response){
         const errors = validateId(parseInt(req.params.id));
 
         if (errors.length > 0) {
